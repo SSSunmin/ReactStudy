@@ -10,6 +10,7 @@ import './App.css';
 class App extends Component {
   constructor(props){
     super(props);
+    this.max_content_id = 3;
     this.state ={
       mode:'read',
       selected_content_id :1,
@@ -23,7 +24,6 @@ class App extends Component {
     }
   }
   render() {
-    console.log('App render');
     let _title, _desc, _article = null;
     if(this.state.mode === 'welcome'){
       _title = this.state.welcome.title;
@@ -42,7 +42,16 @@ class App extends Component {
       }
       _article=<ReadContent title={_title} desc ={_desc}></ReadContent>
     }else if(this.state.mode === 'create'){
-      _article=<CreateContent></CreateContent>
+      _article=<CreateContent onSubmit={function(_title, _desc){
+        // add create to this.state.contents
+        this.max_content_id = this.max_content_id+1;
+        //this.state.contents.push({ id:this.max_content_id, title:_title, desc:_desc}); 
+        //let _contents = this.state.contents.concat({id:this.max_content_id, title:_title, desc:_desc});
+        let newcontents = Array.from(this.state.contents);
+        newcontents.push({id:this.max_content_id, title:_title, desc:_desc});
+        this.setState({contents:newcontents});
+        console.log(_title,_desc);
+      }.bind(this)}></CreateContent>
     }
 
     return (
